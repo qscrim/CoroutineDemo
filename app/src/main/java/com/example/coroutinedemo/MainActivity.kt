@@ -1,6 +1,7 @@
 package com.example.coroutinedemo
 
 import android.os.Bundle
+import android.view.View
 import android.widget.SeekBar
 import androidx.appcompat.app.AppCompatActivity
 import com.example.coroutinedemo.databinding.ActivityMainBinding
@@ -9,6 +10,7 @@ import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.async
 import kotlinx.coroutines.Deferred
 import kotlinx.coroutines.delay
+import kotlinx.coroutines.launch
 
 class MainActivity : AppCompatActivity() {
 
@@ -43,4 +45,13 @@ class MainActivity : AppCompatActivity() {
             delay(5_000)
             return@async "Finished Coroutine ${taskNumber}"
         }
+
+    fun launchCoroutines(view: View) {
+        (1..count).forEach {
+            binding.statusText.text = "Started Coroutine ${it}"
+            coroutineScope.launch(Dispatchers.Main) {
+                binding.statusText.text = performTask(it).await()
+            }
+        }
+    }
 }
